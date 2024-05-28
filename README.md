@@ -1,2 +1,2 @@
 # Better
-Microfrontends on Android.
+Microfrontends on Web and Android.
