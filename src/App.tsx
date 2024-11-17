@@ -1,5 +1,6 @@
 import React from 'react';
 import { SafeAreaView, Text, StyleSheet, Button } from 'react-native';
+import { Generator } from './loto/Generator';
 
 export default () => {
   function bet() {
@@ -7,8 +8,7 @@ export default () => {
   } 
   return (
     <SafeAreaView style={style.App}>
-      <Text>Guacha Better</Text>
-      <Button title="Bet!" onPress={bet}/>
+      <Generator />
     </SafeAreaView>
   )
 };
