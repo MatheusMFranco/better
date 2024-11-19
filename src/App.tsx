@@ -1,28 +1,26 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-
-import Selectable from './components/button/Selectable';
-import Display from './components/display/Display';
+import { SafeAreaView, StyleSheet, Text, TouchableHighlight } from 'react-native';
 
 import { Generator } from './components/loto/Generator';
+import NumbersSelector from './modals/NumbersSelector';
 
 export default class App extends Component {
+
   state = {
-    displayValue: 'Select your lottery numbers',
+    showModal: false,
   }
 
   render() {
     return (
       <SafeAreaView style={style.App}>
-        <Display value={this.state.displayValue} />
-        <View style={style.buttons}>
-          {
-            Array.from({ length: 60 }, (_, i) => {
-              const index = i + 1;
-              return <Selectable key={index} label={index} onClick={() => {}} />
-            })
-          }
-        </View>
+        <NumbersSelector
+          isVisible={this.state.showModal}
+          onCancel={() => this.setState({ showModal: false })} />
+          <TouchableHighlight onPress={() => this.setState({ showModal: true })}>
+            <Text>
+                Create my own game
+            </Text>
+          </TouchableHighlight>
         <Generator />
       </SafeAreaView>
     );
@@ -37,8 +35,4 @@ const style = StyleSheet.create({
     fontSize: 12,
     textAlign: 'justify',
   },
-  buttons: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  }
 });
