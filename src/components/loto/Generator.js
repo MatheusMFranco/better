@@ -14,7 +14,7 @@ export class Generator extends Component {
     updateAmount = size => this.setState({ amount: +size});
 
     randomize = list => {
-        const random = ~~(Math.random() * 60) + 1;
+        const random = Math.ceil(Math.random() * 60) + 1;
         return list.includes(random) ? this.randomize(list) : random;
     };
 
