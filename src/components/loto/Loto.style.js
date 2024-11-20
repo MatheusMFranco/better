@@ -1,25 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-    TextDefault: {
-      fontSize: 16,
-      textAlign: 'center',
-      fontWeight: 'bold',
-      padding: 5,
-    },
-    Input: {
-        borderBottomWidth: 1,
-    },
-    Button: {
-        width: '100%',
-        padding: 2,
-        borderWidth: 1,
-        borderColor: '#000',
-    },
-    ButtonText: {
-        textTransform: 'uppercase',
-        color: '#2a5cd1',
-    },
     NumberContainer: {
         height: 50,
         width: 50,
@@ -29,6 +10,10 @@ export default StyleSheet.create({
     },
     NumberText: {
         color: '#fff',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 32,
+        padding: 4,
     },
     NumberList: {
         marginTop: 20,
