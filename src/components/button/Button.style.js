@@ -10,10 +10,37 @@ export default StyleSheet.create({
         fontSize: 16,
         height: DIMENSION,
         width: DIMENSION,
-        padding: 10,
+        padding: 8,
+        borderWidth: 1,
+        borderColor: '#888',
+    },
+    activeButton: {
+        fontWeight: 'bold',
+        backgroundColor: '#000',
+        textAlign: 'center',
+    },
+    inactiveButton: {
+        backgroundColor: '#fff',
+        textAlign: 'center',
+    },
+    activeText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        width: '100%',
+    },
+    inactiveText: {
+        color: '#000',
+        textAlign: 'center',
+        width: '100%',
+    },
+    action: {
+        fontSize: 14,
+        padding: 5,
         borderWidth: 1,
         backgroundColor: '#f0f0f0',
         textAlign: 'center',
         borderColor: '#888',
+        fontWeight: 'bold',
     },
 });

@@ -1,5 +1,8 @@
 import react from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import {
+    SafeAreaView,
+    Text,
+} from 'react-native';
 
 import styles from './Display.style';
 
