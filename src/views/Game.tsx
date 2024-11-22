@@ -5,11 +5,11 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Generator } from '../components/loto/Generator';
 import NumbersSelector from '../modals/NumbersSelector';
 import Action from '../components/button/Action';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 type RootStackParamList = {
   Favorites: undefined;
