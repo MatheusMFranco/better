@@ -1,19 +1,18 @@
 import react from 'react';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import StackNavigation from './navigation/StackNavigation';
 
-import Favorites from './views/Favorites';
-import Game from './views/Game';
-
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Game">
-          <Stack.Screen name="Favorites" component={Favorites} />
-          <Stack.Screen name="Game" component={Game} />
-        </Stack.Navigator>
+        <Tab.Navigator>
+          <Tab.Screen name="StackNavigation" component={StackNavigation} />
+        </Tab.Navigator>
       </NavigationContainer>
-    );
+  );
 }
