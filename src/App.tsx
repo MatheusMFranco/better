@@ -28,7 +28,6 @@ export default function App() {
             height: 80,
           },
           tabBarIcon: ({ focused, color, size }) => {
-            if (Platform.OS === 'android') {
               let iconName = 'home';
               switch (route.name) {
                 case 'Home':
@@ -41,8 +40,6 @@ export default function App() {
                   iconName = 'home';
               }
               return <Ionicons name={iconName} size={size} color={color} />;
-            }
-            return null;
           },
         })}
       >
