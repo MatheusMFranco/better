@@ -1,14 +1,37 @@
-import React, { createContext } from 'react';
+import React, { createContext, useReducer } from 'react';
 
+const data = [];
+const initialState = { data };
 const GameContext = createContext({});
 
+const actions = {
+    createGame(state, action) {
+        const game = action.payload;
+        return {
+            ...state,
+            data: [...state.data, game],
+        };
+    },
+    deleteGame(state, action) {
+        const game = action.payload;
+        return {
+            ...state,
+            data: state.data.filter(numbers => numbers !== game),
+        };
+    }
+};
+
 export const GameProvider = props => {
-    const data = [
-        '01, 02, 03, 04, 05, 06',
-        '07, 08, 09, 10, 11, 12',
-    ]; 
+
+    function reducer(state, action) {
+        const fn = actions[action.type];
+        return fn ? fn(state, action) : state;
+    }
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+
     return (
-        <GameContext.Provider value={{ state: data }}>
+        <GameContext.Provider value={{ state, dispatch }}>
             { props.children }
         </GameContext.Provider>
     );

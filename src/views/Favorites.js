@@ -10,16 +10,14 @@ import GameContext from '../context/GameContext';
 
 const Favorites = () => {
 
-  useContext(GameContext);
-
-  const data = [
-    '01, 02, 03, 04, 05, 06',
-    '07, 08, 09, 10, 11, 12',
-  ]; 
-
+  const { state, dispatch } = useContext(GameContext);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelect = (item) => {
+    dispatch({
+      type: 'deleteGame',
+      payload: item,
+    });
     setSelectedItems((prevSelected) => {
       if (prevSelected.includes(item)) {
         return prevSelected.filter((selectedItem) => selectedItem !== item);
@@ -47,7 +45,7 @@ const Favorites = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={data}
+        data={state.data}
         renderItem={renderItem}
         keyExtractor={item => item}
       />
