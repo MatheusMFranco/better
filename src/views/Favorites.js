@@ -1,50 +1,63 @@
-import React, { Component } from 'react';
+import React, { useContext, useState } from 'react';
 import {
-  Text,
   SafeAreaView,
   FlatList,
   StyleSheet,
-  View,
 } from 'react-native';
+import { ListItem } from '@rneui/themed';
 
-export default class Favorites extends Component {
+import GameContext from '../context/GameContext';
 
-  data = [
-    12345,
-    7777,
-    8888,
-  ];
+const Favorites = () => {
 
-  renderItem = ({ item }) => (
-    <View style={styles.item}>
-      <Text style={styles.text}>{item}</Text>;
-    </View>
+  const { state, dispatch } = useContext(GameContext);
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (item) => {
+    dispatch({
+      type: 'deleteGame',
+      payload: item,
+    });
+    setSelectedItems((prevSelected) => {
+      if (prevSelected.includes(item)) {
+        return prevSelected.filter((selectedItem) => selectedItem !== item);
+      } else {
+        return [...prevSelected, item];
+      }
+    });
+  };
+
+  const renderItem = ({ item }) => (
+    <ListItem bottomDivider>
+      <ListItem.CheckBox
+        iconType="ionicon"
+        checkedIcon="checkbox-outline"
+        uncheckedIcon="square-outline"
+        checked={selectedItems.includes(item)}
+        onPress={() => handleSelect(item)}
+      />
+      <ListItem.Content>
+        <ListItem.Title>{item}</ListItem.Title>
+      </ListItem.Content>
+    </ListItem>
   );
 
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <FlatList
-          data={this.data}
-          renderItem={this.renderItem}
-          keyExtractor={item => `${item}`}
-        />
-      </SafeAreaView>
-    );
-  }
-}
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={state.data}
+        renderItem={renderItem}
+        keyExtractor={item => item}
+      />
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
   },
-  item: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-  },
-  text: {
-    fontSize: 18,
-  },
 });
+
+export default Favorites;

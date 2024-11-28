@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { Generator } from '../components/loto/Generator';
+import Generator from '../components/loto/Generator';
 import NumbersSelector from '../modals/NumbersSelector';
 import Action from '../components/button/Action';
 
@@ -17,42 +17,37 @@ type RootStackParamList = {
 
 type DetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Favorites'>;
 
-export default class Game extends Component<{navigation: DetailsScreenNavigationProp}> {
+const Game = ({ navigation }: { navigation: DetailsScreenNavigationProp }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [amount, setAmount] = useState(6);
 
-  state = {
-    showModal: false,
-    amount: 6,
-  }
+  const updateAmount = (size: string) => setAmount(+size);
 
-  updateAmount = (size: string) => this.setState({ amount: +size});
-
-  render() {
-    return (
-      <SafeAreaView style={style.App}>
-        <Text style={style.TextDefault}>Chose the number amount:</Text>
-        <TextInput
-          style={[style.Input, style.TextDefault]}
-          keyboardType='numeric'
-          value={`${this.state.amount}`}
-          onChangeText={this.updateAmount}
-        />
-        <NumbersSelector
-          amount={this.state.amount}
-          isVisible={this.state.showModal}
-          onCancel={() => this.setState({ showModal: false })}
-        />
-        <Action
-          label='MAKE YOURS'
-          onClick={() => this.setState({ showModal: true })}
-        />
-        <Generator amount={this.state.amount} />
-        <Action
-          label='FAVORITES'
-          onClick={() => this.props.navigation.navigate('Favorites')}
-        />
-      </SafeAreaView>
-    );
-  }
+  return (
+    <SafeAreaView style={style.App}>
+      <Text style={style.TextDefault}>Chose the number amount:</Text>
+      <TextInput
+        style={[style.Input, style.TextDefault]}
+        keyboardType="numeric"
+        value={`${amount}`}
+        onChangeText={updateAmount}
+      />
+      <NumbersSelector
+        amount={amount}
+        isVisible={showModal}
+        onCancel={() => setShowModal(false)}
+      />
+      <Action
+        label="MAKE YOURS"
+        onClick={() => setShowModal(true)}
+      />
+      <Generator amount={amount} />
+      <Action
+        label="FAVORITES"
+        onClick={() => navigation.navigate('Favorites')}
+      />
+    </SafeAreaView>
+  );
 };
 
 const style = StyleSheet.create({
@@ -73,3 +68,5 @@ const style = StyleSheet.create({
     padding: 5,
   },
 });
+
+export default Game;
