@@ -17,8 +17,12 @@ export default StyleSheet.create({
     },
     NumberList: {
         marginTop: 20,
+        marginBottom: 10,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-    }
+    },
+    Action: {
+        width: '80%',
+    },
 });

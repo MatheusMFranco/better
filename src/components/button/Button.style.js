@@ -34,13 +34,4 @@ export default StyleSheet.create({
         textAlign: 'center',
         width: '100%',
     },
-    action: {
-        fontSize: 14,
-        padding: 5,
-        borderWidth: 1,
-        backgroundColor: '#f0f0f0',
-        textAlign: 'center',
-        borderColor: '#888',
-        fontWeight: 'bold',
-    },
 });

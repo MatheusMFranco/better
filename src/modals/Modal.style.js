@@ -5,10 +5,10 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(0,0,0,0.8)',
     },
     buttons: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-    }
+    },
 });
