@@ -18,8 +18,7 @@ export default function App() {
           <Tab.Navigator
             initialRouteName="Home"
             screenOptions={({ route }) => ({
-              tabBarActiveTintColor: 'red',
-              tabBarInactiveTintColor: 'blue',
+              tabBarActiveTintColor: '#ad1457',
               tabBarLabelStyle: {
                 fontSize: 16,
                 fontWeight: 'bold',

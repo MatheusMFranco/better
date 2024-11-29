@@ -1,16 +1,19 @@
 import React, { useState, useCallback, useContext } from 'react';
 import { SafeAreaView, ToastAndroid, Platform, Alert } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import styles from './Loto.style';
 import Chosen from './Chosen';
-import Action from '../button/Action';
 import GameContext from '../../context/GameContext';
 
 const Generator = ({ amount }) => {
   const [numbers, setNumbers] = useState([]);
   const { dispatch, state } = useContext(GameContext);
+
+  const MAX_AMOUNT = 12;
+
+  const isInvalid = amount <= 0 || amount > MAX_AMOUNT;
 
   const randomize = useCallback((list) => {
     const random = Math.ceil(Math.random() * 60) + 1;
@@ -34,7 +37,7 @@ const Generator = ({ amount }) => {
   }, [amount, randomize]);
 
   const save = () => {
-    const game = numbers.join(', ');
+    const game = numbers.sort((a, b) => a - b).join(' ');
     const existingGames = state.data || [];
     if (existingGames.includes(game)) {
       notify(`${game} has already been saved!`);
@@ -55,7 +58,14 @@ const Generator = ({ amount }) => {
 
   return (
     <>
-      <Action label="GENERATE" onClick={generateNumbers} />
+      <Button
+        title=" GENERATE"
+        color="secondary"
+        containerStyle={styles.Action}
+        icon={<Ionicons name='sync-circle-outline' size={24} color='white' />}
+        onPress={generateNumbers}
+        disabled={isInvalid} 
+      />
       <SafeAreaView style={styles.NumberList}>
         {displayNumbers()}
       </SafeAreaView>
@@ -63,6 +73,7 @@ const Generator = ({ amount }) => {
         <Button
           icon={<Ionicons name='heart-outline' size={15} color='white' />}
           title=" SAVE"
+          color="secondary"
           onPress={save}
         />
       )}
