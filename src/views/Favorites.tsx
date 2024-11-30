@@ -8,12 +8,20 @@ import { ListItem } from '@rneui/themed';
 
 import GameContext from '../context/GameContext';
 
-const Favorites = () => {
+interface GameContextState {
+  data: string[];
+}
 
-  const { state, dispatch } = useContext(GameContext);
-  const [selectedItems, setSelectedItems] = useState([]);
+interface GameContextProps {
+  state: GameContextState;
+  dispatch: React.Dispatch<any>;
+}
 
-  const handleSelect = (item) => {
+const Favorites: React.FC = () => {
+  const { state, dispatch } = useContext<GameContextProps>(GameContext);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  const handleSelect = (item: string) => {
     dispatch({
       type: 'deleteGame',
       payload: item,
@@ -27,7 +35,7 @@ const Favorites = () => {
     });
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: string }) => (
     <ListItem bottomDivider>
       <ListItem.CheckBox
         iconType="ionicon"
@@ -47,7 +55,7 @@ const Favorites = () => {
       <FlatList
         data={state.data}
         renderItem={renderItem}
-        keyExtractor={item => item}
+        keyExtractor={(item) => item}
       />
     </SafeAreaView>
   );

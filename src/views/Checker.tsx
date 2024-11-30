@@ -3,9 +3,14 @@ import {
   Text,
   SafeAreaView,
   StyleSheet,
+  ViewStyle,
 } from 'react-native';
 
-export default class Checker extends Component {
+interface Props {}
+
+interface State {}
+
+export default class Checker extends Component<Props, State> {
 
   render() {
     return (
@@ -20,5 +25,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
-  },
+  } as ViewStyle,
 });
