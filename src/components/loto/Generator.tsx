@@ -7,20 +7,24 @@ import styles from './Loto.style';
 import Chosen from './Chosen';
 import GameContext from '../../context/GameContext';
 
-const Generator = ({ amount }) => {
-  const [numbers, setNumbers] = useState([]);
+interface GeneratorProps {
+  amount: number;
+}
+
+const Generator: React.FC<GeneratorProps> = ({ amount }) => {
+  const [numbers, setNumbers] = useState<number[]>([]);
   const { dispatch, state } = useContext(GameContext);
 
   const MAX_AMOUNT = 12;
 
   const isInvalid = amount <= 0 || amount > MAX_AMOUNT;
 
-  const randomize = useCallback((list) => {
+  const randomize = useCallback((list: number[]): number => {
     const random = Math.ceil(Math.random() * 60) + 1;
     return list.includes(random) ? randomize(list) : random;
   }, []);
 
-  const notify = (message) => {
+  const notify = (message: string): void => {
     if (Platform.OS === 'android') {
       ToastAndroid.show(message, ToastAndroid.SHORT);
     } else if (Platform.OS === 'ios') {
@@ -31,7 +35,7 @@ const Generator = ({ amount }) => {
   const generateNumbers = useCallback(() => {
     const newNumbers = Array(amount)
       .fill(null)
-      .reduce((list) => [...list, randomize(list)], [])
+      .reduce((list: number[]) => [...list, randomize(list)], [])
       .sort((a, b) => a - b);
     setNumbers(newNumbers);
   }, [amount, randomize]);
@@ -62,16 +66,16 @@ const Generator = ({ amount }) => {
         title=" GENERATE"
         color="secondary"
         containerStyle={styles.Action}
-        icon={<Ionicons name='sync-circle-outline' size={24} color='white' />}
+        icon={<Ionicons name="sync-circle-outline" size={24} color="white" />}
         onPress={generateNumbers}
-        disabled={isInvalid} 
+        disabled={isInvalid}
       />
       <SafeAreaView style={styles.NumberList}>
         {displayNumbers()}
       </SafeAreaView>
       {numbers.length > 0 && (
         <Button
-          icon={<Ionicons name='heart-outline' size={15} color='white' />}
+          icon={<Ionicons name="heart-outline" size={15} color="white" />}
           title=" SAVE"
           color="secondary"
           onPress={save}

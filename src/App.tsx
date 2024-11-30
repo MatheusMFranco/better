@@ -5,8 +5,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { GameProvider } from './context/GameContext';
-import StackNavigation from './navigation/StackNavigation';
 import Checker from './views/Checker';
+import StackNavigation from './navigation/StackNavigation';
 
 const Tab = createBottomTabNavigator();
 
