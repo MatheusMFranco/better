@@ -33,12 +33,16 @@ const Display: React.FC<DisplayProps> = (props) => {
 
   const save = (): void => {
     const game = props.value;
-    const existingGames = state.data || [];
+    const existingGames = state.specials || [];
     if (existingGames.includes(game)) {
       notify(`${game} has already been saved!`);
     } else {
       dispatch({
         type: 'createGame',
+        payload: game,
+      });
+      dispatch({
+        type: 'dailyGame',
         payload: game,
       });
       const message = `${game} has been saved!`;
