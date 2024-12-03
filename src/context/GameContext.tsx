@@ -1,10 +1,7 @@
 import React, { createContext, useReducer, ReactNode } from 'react';
+import { GameState } from '../models/GameState.model';
 
-interface GameState {
-  data: string[];
-}
-
-type ActionType = 'createGame' | 'deleteGame';
+type ActionType = 'createGame' | 'deleteGame' | 'dailyGame';
 
 interface Action {
   type: ActionType;
@@ -16,14 +13,24 @@ const actions = {
     const game = action.payload;
     return {
       ...state,
-      data: [...state.data, game],
+      specials: [...state.specials, game],
     };
   },
   deleteGame(state: GameState, action: Action): GameState {
     const game = action.payload;
     return {
       ...state,
-      data: state.data.filter((numbers) => numbers !== game),
+      specials: state.specials.filter((numbers) => numbers !== game),
+    };
+  },
+  dailyGame(state: GameState, action: Action): GameState {
+    const game = action.payload;
+    return {
+      ...state,
+      daily: [...state.daily, { 
+        numbers: game,
+        registerDate: new Date(),
+      }],
     };
   },
 };
@@ -34,7 +41,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = (props) => {
     return fn ? fn(state, action) : state;
   }
 
-  const [state, dispatch] = useReducer(reducer, { data: [] });
+  const [state, dispatch] = useReducer(reducer, { specials: [],  daily: []});
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>
@@ -47,7 +54,7 @@ const GameContext = createContext<{
   state: GameState;
   dispatch: React.Dispatch<Action>;
 }>({
-  state: { data: [] },
+  state: { specials: [], daily: []},
   dispatch: () => {},
 });
 

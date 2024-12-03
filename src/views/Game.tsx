@@ -3,22 +3,16 @@ import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { SpeedDial, Button, Text, Input } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Generator from '../components/loto/Generator';
 import NumbersSelector from '../modals/NumbersSelector';
+import { FavoritesNavigationProp } from '../props/FavoritesProps';
 
-type RootStackParamList = {
-  Favorites: undefined;
-};
-
-type DetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Favorites'>;
-
-const Game = ({ navigation }: { navigation: DetailsScreenNavigationProp }) => {
+const Game = ({ navigation }: { navigation: FavoritesNavigationProp }) => {
   const [showModal, setShowModal] = useState(false);
-  const [openFavoritesDeal, setFavoritesDeal] = React.useState(false);
+  const [openFavoritesDeal, setOpenFavoritesDeal] = React.useState(false);
   const [amount, setAmount] = useState(6);
   
   const MAX_AMOUNT = 12;
@@ -59,23 +53,23 @@ const Game = ({ navigation }: { navigation: DetailsScreenNavigationProp }) => {
         isOpen={openFavoritesDeal}
         icon={<Ionicons name='heart' size={24} color='white' />}
         openIcon={<Ionicons name='close' size={24} color='white' />}
-        onOpen={() => setFavoritesDeal(!openFavoritesDeal)}
-        onClose={() => setFavoritesDeal(!openFavoritesDeal)}
+        onOpen={() => setOpenFavoritesDeal(!openFavoritesDeal)}
+        onClose={() => setOpenFavoritesDeal(!openFavoritesDeal)}
       >
         <SpeedDial.Action
-          icon={<Ionicons name='alarm' size={20} color='white' />}
-          title="Daily"
+          icon={<Ionicons name='time' size={20} color='white' />}
+          title="History"
           onPress={() => { 
-            navigation.navigate('Favorites');
-            setFavoritesDeal(false);
+            navigation.navigate('Favorites', { action: 'daily' });
+            setOpenFavoritesDeal(false);
           }}
         />
         <SpeedDial.Action
           icon={<Ionicons name='star' size={20} color='white' />}
           title="Specials"
           onPress={() => {
-            navigation.navigate('Favorites');
-            setFavoritesDeal(false);
+            navigation.navigate('Favorites', { action: 'specials' });
+            setOpenFavoritesDeal(false);
           }}
         />
       </SpeedDial>

@@ -38,11 +38,15 @@ const Generator: React.FC<GeneratorProps> = ({ amount }) => {
       .reduce((list: number[]) => [...list, randomize(list)], [])
       .sort((a, b) => a - b);
     setNumbers(newNumbers);
+    dispatch({
+      type: 'dailyGame',
+      payload: newNumbers.join(' '),
+    });
   }, [amount, randomize]);
 
   const save = () => {
     const game = numbers.sort((a, b) => a - b).join(' ');
-    const existingGames = state.data || [];
+    const existingGames = state.specials || [];
     if (existingGames.includes(game)) {
       notify(`${game} has already been saved!`);
     } else {
