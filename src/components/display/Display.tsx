@@ -27,7 +27,7 @@ const Display: React.FC<DisplayProps> = (props) => {
     if (Platform.OS === 'android') {
       ToastAndroid.show(message, ToastAndroid.SHORT);
     } else if (Platform.OS === 'ios') {
-      Alert.alert('Loto', message);
+      Alert.alert('Better', message);
     }
   };
 
