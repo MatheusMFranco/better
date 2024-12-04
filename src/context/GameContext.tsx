@@ -17,10 +17,10 @@ const actions = {
     };
   },
   deleteGame(state: GameState, action: Action): GameState {
-    const game = action.payload;
+    const gamesToDelete = action.payload;
     return {
       ...state,
-      specials: state.specials.filter((numbers) => numbers !== game),
+      specials: state.specials.filter((numbers) => !gamesToDelete.includes(numbers)),
     };
   },
   dailyGame(state: GameState, action: Action): GameState {

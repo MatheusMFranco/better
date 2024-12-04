@@ -3,8 +3,12 @@ import {
   SafeAreaView,
   FlatList,
   StyleSheet,
+  Alert,
+  Platform,
+  ToastAndroid,
 } from 'react-native';
-import { ListItem } from '@rneui/themed';
+import { ListItem, Button, Text } from '@rneui/themed';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import GameContext from '../context/GameContext';
 import { DailyItem, GameState } from '../models/GameState.model';
@@ -26,17 +30,52 @@ const Favorites: React.FC = () => {
 
   useEffect(() => {
     if (action === 'specials') {
-      navigation.setOptions({ title: 'Specials' });
+      navigation.setOptions({
+        title: 'Specials',
+        headerRight: () => selectedItems.length ? (
+          <Button
+            color='secondary'
+            icon={<Ionicons name='trash-bin-outline' size={15} color='white' />}
+            onPress={() => {
+              Alert.alert(
+                'Confirm Deletion', 
+                `Are you sure you want to delete ${selectedItems.length} item(s)?`, 
+                [
+                  {
+                    text: 'Cancel',
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Delete',
+                    onPress: () => {
+                      dispatch({
+                        type: 'deleteGame',
+                        payload: selectedItems,
+                      });
+                      setSelectedItems([]);
+                      const message = 'Items deleted successfully!';
+                      if (Platform.OS === 'android') {
+                        ToastAndroid.show(message, ToastAndroid.SHORT);
+                      } else if (Platform.OS === 'ios') {
+                        Alert.alert('Better', message);
+                      }
+                    },
+                    style: 'destructive',
+                  },
+                ],
+                { cancelable: true }
+              );
+            }}
+            title={'+' + selectedItems.length.toString()}
+          />
+        ) : <></>,
+      });
     } else if (action === 'daily') {
       navigation.setOptions({ title: 'History' });
     }
-  }, [action, navigation]);  
+  }, [action, navigation, selectedItems, dispatch]);
 
   const handleSelect = (item: string) => {
-    dispatch({
-      type: 'deleteGame',
-      payload: item,
-    });
     setSelectedItems((prevSelected) => {
       if (prevSelected.includes(item)) {
         return prevSelected.filter((selectedItem) => selectedItem !== item);
@@ -54,15 +93,18 @@ const Favorites: React.FC = () => {
     } else {
       formatted = `${item}`;
     }
+
     return (
       <ListItem bottomDivider>
-        {action === 'specials' && (<ListItem.CheckBox
-          iconType="ionicon"
-          checkedIcon="checkbox-outline"
-          uncheckedIcon="square-outline"
-          checked={selectedItems.includes(formatted)}
-          onPress={() => handleSelect(formatted)}
-        />)}
+        {action === 'specials' && (
+          <ListItem.CheckBox
+            iconType="ionicon"
+            checkedIcon="checkbox-outline"
+            uncheckedIcon="square-outline"
+            checked={selectedItems.includes(formatted)}
+            onPress={() => handleSelect(formatted)}
+          />
+        )}
         <ListItem.Content>
           <ListItem.Title>{formatted}</ListItem.Title>
         </ListItem.Content>
@@ -76,6 +118,11 @@ const Favorites: React.FC = () => {
         data={action === 'daily' ? state.daily : state.specials}
         renderItem={renderItem}
         keyExtractor={(_, index) => `${index}`}
+        ListEmptyComponent={<Text h4 style={styles.emptyMessage}>{
+          action === 'daily' ?
+          'All the games created or generated will appear here.':
+          'The games saved as favorites will appear here.'  
+        }</Text>}
       />
     </SafeAreaView>
   );
@@ -86,6 +133,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
   },
+  emptyMessage: {
+    padding: 10,
+    textAlign: 'center',
+  }
 });
 
 export default Favorites;
