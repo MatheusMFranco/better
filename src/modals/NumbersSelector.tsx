@@ -13,15 +13,15 @@ interface ModalProps {
   onCancel: () => void;
 }
 
-const ModalComponent: React.FC<ModalProps> = (props) => {
-  const [numbers, setNumbers] = useState<number[]>([]);
+const ModalComponent: React.FC<ModalProps> = props => {
+  const [numbers, setNumbers] = useState<string[]>([]);
 
-  const toggleNumber = (number: number) => {
-    if (numbers.includes(number)) {
-      setNumbers((prevNumbers) => prevNumbers.filter((n) => n !== number));
+  const toggleNumber = (numberSelected: string) => {
+    if (numbers.includes(numberSelected)) {
+      setNumbers((prevNumbers) => prevNumbers.filter(n => n !== numberSelected));
     } else {
       if (numbers.length < props.amount) {
-        setNumbers((prevNumbers) => [...prevNumbers, number]);
+        setNumbers((prevNumbers) => [...prevNumbers, numberSelected]);
       }
     }
   };
@@ -43,7 +43,7 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
           cancel={cancel}
           amount={numbers.length}
           max={props.amount}
-          value={numbers.sort((a, b) => a - b).join(' ')}
+          value={numbers.sort((a, b) => +a - +b).join(' ')}
         />
         <View style={styles.buttons}>
           {Array.from({ length: 60 }, (_, i) => {
@@ -51,10 +51,10 @@ const ModalComponent: React.FC<ModalProps> = (props) => {
             return (
               <Selectable
                 key={index}
-                label={`${index}`}
-                onClick={() => toggleNumber(index)}
+                label={`${index}`.padStart(2, '0')}
+                onClick={() => toggleNumber(`${index}`.padStart(2, '0'))}
                 list={numbers}
-                disabled={numbers.length >= props.amount && !numbers.includes(index)}
+                disabled={numbers.length >= props.amount && !numbers.includes(`${index}`.padStart(2, '0'))}
               />
             );
           })}
