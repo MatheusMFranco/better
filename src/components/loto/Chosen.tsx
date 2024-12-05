@@ -4,7 +4,7 @@ import { SafeAreaView, Text } from 'react-native';
 import styles from './Loto.style';
 
 interface ChosenProps {
-  chosen: number;
+  chosen: string;
 }
 
 const Chosen: React.FC<ChosenProps> = ({ chosen }) => {

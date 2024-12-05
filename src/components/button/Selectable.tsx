@@ -10,7 +10,7 @@ interface SelectableButtonProps {
   onClick: () => void;
   label: string;
   disabled: boolean;
-  list: number[];
+  list: string[];
 }
 
 const SelectableButton: React.FC<SelectableButtonProps> = ({ onClick, label, disabled, list }) => {
@@ -20,13 +20,13 @@ const SelectableButton: React.FC<SelectableButtonProps> = ({ onClick, label, dis
     if (!disabled) {
       setIsActive(prevState => !prevState);
       onClick();
-    } else if (list.includes(+label)) {
+    } else if (list.includes(label)) {
       setIsActive(prevState => !prevState);
     }
   };
 
   useEffect(() => {
-    if (list.includes(+label)) {
+    if (list.includes(label)) {
       setIsActive(true);
     }
   }, [list, label]);

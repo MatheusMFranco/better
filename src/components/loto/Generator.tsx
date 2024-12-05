@@ -12,15 +12,15 @@ interface GeneratorProps {
 }
 
 const Generator: React.FC<GeneratorProps> = ({ amount }) => {
-  const [numbers, setNumbers] = useState<number[]>([]);
+  const [numbers, setNumbers] = useState<string[]>([]);
   const { dispatch, state } = useContext(GameContext);
 
   const MAX_AMOUNT = 12;
 
   const isInvalid = amount <= 0 || amount > MAX_AMOUNT;
 
-  const randomize = useCallback((list: number[]): number => {
-    const random = Math.ceil(Math.random() * 60) + 1;
+  const randomize = useCallback((list: string[]): string => {
+    const random = `${Math.ceil(Math.random() * 60) + 1}`.padStart(2, '0');
     return list.includes(random) ? randomize(list) : random;
   }, []);
 
@@ -35,8 +35,8 @@ const Generator: React.FC<GeneratorProps> = ({ amount }) => {
   const generateNumbers = useCallback(() => {
     const newNumbers = Array(amount)
       .fill(null)
-      .reduce((list: number[]) => [...list, randomize(list)], [])
-      .sort((a, b) => a - b);
+      .reduce((list: string[]) => [...list, randomize(list)], [])
+      .sort((a, b) => +a - +b);
     setNumbers(newNumbers);
     dispatch({
       type: 'dailyGame',
@@ -45,7 +45,7 @@ const Generator: React.FC<GeneratorProps> = ({ amount }) => {
   }, [amount, randomize]);
 
   const save = () => {
-    const game = numbers.sort((a, b) => a - b).join(' ');
+    const game = numbers.sort((a, b) => +a - +b).join(' ');
     const existingGames = state.specials || [];
     if (existingGames.includes(game)) {
       notify(`${game} has already been saved!`);
