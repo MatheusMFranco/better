@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, ReactNode, useEffect } from 'react';
-import { GameState } from '../models/GameState.model';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { GameState } from '../models/GameState.model';
 
 type ActionType = 'createGame' | 'deleteGame' | 'dailyGame' | 'removeAllDailyGame' | 'removeAllSpecialsGame';
 
@@ -75,7 +76,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = props => {
           });
         }
       } catch (error) {
-        console.error('Erro ao carregar dados', error);
+        console.error('Error loading data', error);
       }
     };
 
@@ -87,7 +88,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = props => {
       await AsyncStorage.setItem('specials', JSON.stringify(newState.specials));
       await AsyncStorage.setItem('daily', JSON.stringify(newState.daily));
     } catch (error) {
-      console.error('Erro ao salvar no AsyncStorage', error);
+      console.error('Erro saving data', error);
     }
   };
 
