@@ -3,7 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { GameState } from '../models/GameState.model';
 
-type ActionType = 'createGame' | 'deleteGame' | 'dailyGame' | 'removeAllDailyGame' | 'removeAllSpecialsGame';
+type ActionType =
+  'createGame' |
+  'deleteGame' |
+  'dailyGame' |
+  'removeAllDailyGame' |
+  'removeAllSpecialsGame' |
+  'importToFavorites';
 
 interface Action {
   type: ActionType;
@@ -45,6 +51,13 @@ const actions = {
     return {
       ...state,
       specials: [],
+    };
+  },
+  importToFavorites(state: GameState, action: Action): GameState {
+    const game = action.payload as string[];
+    return {
+      ...state,
+      specials: game,
     };
   },
 };
