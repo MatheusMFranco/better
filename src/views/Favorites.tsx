@@ -7,18 +7,15 @@ import {
   Platform,
   ToastAndroid,
 } from 'react-native';
-import { ListItem, Button, Text } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import GameContext from '../context/GameContext';
-import { DailyItem, GameState } from '../models/GameState.model';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { FavoritesRouteProp } from '../props/FavoritesProps';
+import { ListItem, Button, Text } from '@rneui/themed';
 
-interface GameContextProps {
-  state: GameState;
-  dispatch: React.Dispatch<any>;
-}
+import GameContext from '../context/GameContext';
+import { DailyItem } from '../models/GameState.model';
+import { FavoritesRouteProp } from '../props/FavoritesProps';
+import { GameContextProps } from '../props/GameContextProps';
 
 const Favorites: React.FC = () => {
   const { state, dispatch } = useContext<GameContextProps>(GameContext);
@@ -131,7 +128,6 @@ const Favorites: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
   },
   emptyMessage: {
     padding: 10,

@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GameProvider } from './context/GameContext';
 import Checker from './views/Checker';
 import StackNavigation from './navigation/StackNavigation';
+import DataManager from './views/DataManager';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,6 +39,9 @@ export default function App() {
                     case 'Checker':
                       iconName = focused ? 'search-circle' : 'search-circle-outline';
                       break;
+                    case 'Data':
+                      iconName = focused ? 'file-tray-full' : 'file-tray-full-outline';
+                      break;
                     default:
                       iconName = 'home';
                   }
@@ -55,6 +59,10 @@ export default function App() {
             <Tab.Screen
               name="Checker"
               component={Checker}
+            />
+            <Tab.Screen
+              name="Data"
+              component={DataManager}
             />
           </Tab.Navigator>
         </NavigationContainer>
