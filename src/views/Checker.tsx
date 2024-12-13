@@ -8,17 +8,11 @@ import {
 import { Button, Text, Input } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { GameState } from '../models/GameState.model';
 import GameContext from '../context/GameContext';
-
-interface ValidGame {
-  game: string;
-  matches: number;
-}
-interface GameContextProps {
-  state: GameState;
-  dispatch: React.Dispatch<any>;
-}
+import { GameContextProps } from '../props/GameContextProps';
+import { ValidGame } from '../models/ValidGame';
+import { gameRegex } from '../components/regex/GameRegex';
+import { MAX_AMOUNT } from '../components/constants/MinAndMax';
 
 const Checker = () => {
   const [game, setGame] = useState<string>('');
@@ -26,7 +20,7 @@ const Checker = () => {
   const [showResult, setShowResult] = useState(false);
   const { state } = useContext<GameContextProps>(GameContext);
 
-  const isInvalid = !/^(?!.*\b(\d{2})\b.*\b\1\b)(0[1-9]|[1-5][0-9]|60)([,]?(0[1-9]|[1-5][0-9]|60)){5,11}$/.test(game.replaceAll(' ', ''));
+  const isInvalid = !gameRegex.test(game.replaceAll(' ', ''));
 
   const splitIntoPairs = (str: string): string[] => {
     const cleanedStr = str.replace(/\D/g, '');
@@ -34,12 +28,13 @@ const Checker = () => {
   };
 
   const checkValidGames = () => {
+    const MIN_PRICE_AMOUNT = 4;
     const result: ValidGame[] = state.specials.map(gameItem => {
       const winningNumbers = splitIntoPairs(game);
       const gameNumbers = splitIntoPairs(gameItem);
       const matches = gameNumbers.filter(num => winningNumbers.includes(num)).length;
 
-      if (matches >= 4) {
+      if (matches >= MIN_PRICE_AMOUNT) {
         return { game: gameItem, matches };
       }
       return null;
@@ -61,7 +56,7 @@ const Checker = () => {
         style={[style.Input, style.Container]}
         onChangeText={setGame}
         errorStyle={style.Input}
-        errorMessage={game.length >= 12 && isInvalid ? `Insert a valid game` : ''}
+        errorMessage={game.length >= MAX_AMOUNT && isInvalid ? `Insert a valid game` : ''}
       />
       <Button
         title="CHECK YOUR GAME"
@@ -95,9 +90,9 @@ const Checker = () => {
 const style = StyleSheet.create({
   Checker: {
     flexGrow: 1,
+    fontSize: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 12,
     textAlign: 'justify',
   },
   Container: {
@@ -118,8 +113,8 @@ const style = StyleSheet.create({
   },
   ListHeader: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 10,
+    fontWeight: 'bold',
   },
   GameItem: {
     fontSize: 16,
@@ -128,8 +123,8 @@ const style = StyleSheet.create({
   },
   NoMatchesMessage: {
     fontSize: 16,
-    color: 'red',
     marginTop: 20,
+    color: 'red',
     fontWeight: 'bold',
   },
 });

@@ -5,17 +5,18 @@ import {
   View,
   Alert,
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
-import RNFS from 'react-native-fs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import { Button, Dialog, Text } from '@rneui/themed';
+import DocumentPicker from 'react-native-document-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import RNFS from 'react-native-fs';
 
 import { GameContextProps } from '../props/GameContextProps';
 import GameContext from '../context/GameContext';
+import { notify } from '../utils/MessageUtils';
 
 const DataManager = () => {
 
+  const SEPARATOR = '\n';
   const FILE_NAME = 'better.txt'
   const { state, dispatch } = useContext<GameContextProps>(GameContext);
   const [openDialog, setOpenDialog] = useState(false);
@@ -29,52 +30,43 @@ const DataManager = () => {
   const exportToFile = async () => {
     try {
       const filePath = `${RNFS.DownloadDirectoryPath}/${FILE_NAME}`;
-      const fileContent = state.specials.join('\n');
+      const fileContent = state.specials.join(SEPARATOR);
       await RNFS.writeFile(filePath, fileContent, 'utf8');
-      Alert.alert('Success', `File saved in: ${filePath}`);
-    } catch (err) {
-      Alert.alert('Error', 'Error saving file');
+      notify(`File saved in: ${filePath}`);
+    } catch (_) {
+      notify('Error saving file');
     }
   };
 
   const importFromFile = async () => {
     try {
-      const res = await DocumentPicker.pick({
+      const response = await DocumentPicker.pick({
         type: [DocumentPicker.types.plainText],
       });
 
-      const filePath = res[0].uri;
+      const filePath = response[0].uri;
       const fileContent = await RNFS.readFile(filePath, 'utf8');
-      const fileLines = fileContent.split('\n');
+      const fileLines = fileContent.split(SEPARATOR);
       dispatch({
         type: 'importToFavorites',
         payload: [...new Set(fileLines)],
       });
-      Alert.alert('Success', 'Games imported to favorites!');
+      notify('Games imported to favorites!');
     } catch (err) {
-      Alert.alert('Error', 'Error importing file');
+      notify('Error importing file');
     }
   };
 
-  const cleanFavorites = () => {
+  const cleanList = (listType: string) => {
     dispatch({
-      type: 'removeAllSpecialsGame',
+      type: `removeAll${listType}Game`,
       payload: [],
     });
     setOpenDialog(false);
-    Alert.alert('Success', 'The favorite list has been cleaned.');
+    notify('The list has been cleaned.');
   };
 
-  const cleanHistory = () => {
-    dispatch({
-      type: 'removeAllDailyGame',
-      payload: [],
-    });
-    setOpenDialog(false);
-    Alert.alert('Success', 'The history list has been cleaned.');
-  };
-
-  const clean = () => modalType === 'history' ? cleanHistory() : cleanFavorites();
+  const clean = () => cleanList(modalType === 'history' ? 'Daily' : 'Specials');
 
   return (
     <SafeAreaView style={styles.DataManager}>

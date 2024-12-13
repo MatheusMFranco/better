@@ -3,19 +3,23 @@ import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
-import { SpeedDial, Button, Text, Input } from '@rneui/themed';
+import {
+  SpeedDial,
+  Button,
+  Text,
+  Input,
+} from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Generator from '../components/loto/Generator';
 import NumbersSelector from '../modals/NumbersSelector';
 import { FavoritesNavigationProp } from '../props/FavoritesProps';
+import { MAX_AMOUNT } from '../components/constants/MinAndMax';
 
 const Game = ({ navigation }: { navigation: FavoritesNavigationProp }) => {
   const [showModal, setShowModal] = useState(false);
   const [openFavoritesDeal, setOpenFavoritesDeal] = React.useState(false);
   const [amount, setAmount] = useState(6);
-  
-  const MAX_AMOUNT = 12;
 
   const updateAmount = (size: string) => setAmount(+size);
 

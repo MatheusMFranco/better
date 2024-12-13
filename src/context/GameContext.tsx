@@ -2,19 +2,7 @@ import React, { createContext, useReducer, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { GameState } from '../models/GameState.model';
-
-type ActionType =
-  'createGame' |
-  'deleteGame' |
-  'dailyGame' |
-  'removeAllDailyGame' |
-  'removeAllSpecialsGame' |
-  'importToFavorites';
-
-interface Action {
-  type: ActionType;
-  payload: string | string[];
-}
+import { Action } from '../models/Action.model';
 
 const actions = {
   createGame(state: GameState, action: Action): GameState {
@@ -28,7 +16,7 @@ const actions = {
     const gamesToDelete = action.payload as string[];
     return {
       ...state,
-      specials: state.specials.filter((numbers) => !gamesToDelete.includes(numbers)),
+      specials: state.specials.filter(numbers => !gamesToDelete.includes(numbers)),
     };
   },
   dailyGame(state: GameState, action: Action): GameState {
@@ -62,6 +50,7 @@ const actions = {
   },
 };
 
+
 export const GameProvider: React.FC<{ children: ReactNode }> = props => {
   const [state, dispatch] = useReducer(reducer, { specials: [], daily: [] });
 
@@ -92,7 +81,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = props => {
         console.error('Error loading data', error);
       }
     };
-
     loadState();
   }, []);
 
@@ -101,7 +89,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = props => {
       await AsyncStorage.setItem('specials', JSON.stringify(newState.specials));
       await AsyncStorage.setItem('daily', JSON.stringify(newState.daily));
     } catch (error) {
-      console.error('Erro saving data', error);
+      console.error('Error saving data', error);
     }
   };
 

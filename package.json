@@ -18,6 +18,8 @@
     "@react-navigation/stack": "^7.0.5",
     "@rneui/base": "^0.0.0-edge.2",
     "@rneui/themed": "^0.0.0-edge.2",
+    "@testing-library/react-native": "^12.9.0",
+    "jest-mock": "^29.7.0",
     "react": "18.3.1",
     "react-native": "0.76.1",
     "react-native-document-picker": "^9.3.1",
