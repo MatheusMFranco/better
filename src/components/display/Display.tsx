@@ -1,62 +1,46 @@
 import React, { useContext } from 'react';
 import {
-  Alert,
-  Platform,
   SafeAreaView,
   Text,
-  ToastAndroid,
   View,
 } from 'react-native';
 import { Button } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import styles from './Display.style';
+import { DisplayProps } from '../../props/DisplayProps';
+import { notify } from '../../utils/MessageUtils';
+import { ActionType } from '../../models/Action.model';
 import GameContext from '../../context/GameContext';
+import styles from './Display.style';
 
-interface DisplayProps {
-  value: string;
-  amount: number;
-  max: number;
-  cancel: () => void;
-}
-
-const Display: React.FC<DisplayProps> = (props) => {
+const Display: React.FC<DisplayProps> = ({
+  value,
+  amount,
+  max,
+  cancel,
+}) => {
   const { dispatch, state } = useContext(GameContext);
 
-  const notify = (message: string): void => {
-    if (Platform.OS === 'android') {
-      ToastAndroid.show(message, ToastAndroid.SHORT);
-    } else if (Platform.OS === 'ios') {
-      Alert.alert('Better', message);
-    }
-  };
+  const send = (type: ActionType) => dispatch({ type, payload: value});
 
   const save = (): void => {
-    const game = props.value;
     const existingGames = state.specials || [];
-    if (existingGames.includes(game)) {
-      notify(`${game} has already been saved!`);
+    if (existingGames.includes(value)) {
+      notify(`${value} has already been saved!`);
     } else {
-      dispatch({
-        type: 'createGame',
-        payload: game,
-      });
-      dispatch({
-        type: 'dailyGame',
-        payload: game,
-      });
-      const message = `${game} has been saved!`;
-      notify(message);
-      props.cancel();
+      send('createGame');
+      send('dailyGame');
+      notify(`${value} has been saved!`);
+      cancel();
     }
   };
 
   return (
     <SafeAreaView style={styles.display}>
       <Text style={styles.displayValue}>
-        {props.value}
+        {value}
       </Text>
-      {props.amount === props.max && (
+      {amount === max && (
         <View style={styles.buttons}>
           <Button
             icon={<Ionicons name='heart-outline' size={15} color='white' />}

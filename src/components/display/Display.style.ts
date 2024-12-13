@@ -1,12 +1,16 @@
-import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import {
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 
 export default StyleSheet.create({
   display: {
     flex: 1,
     padding: 20,
+    width: '60%',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '60%',
   } as ViewStyle,
 
   displayValue: {
@@ -17,9 +21,9 @@ export default StyleSheet.create({
 
   buttons: {
     padding: 10,
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
-    width: '100%',
     alignItems: 'center',
   } as ViewStyle,
 });

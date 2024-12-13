@@ -8,7 +8,6 @@ import {
   ToastAndroid,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ListItem, Button, Text } from '@rneui/themed';
 
@@ -16,6 +15,7 @@ import GameContext from '../context/GameContext';
 import { DailyItem } from '../models/GameState.model';
 import { FavoritesRouteProp } from '../props/FavoritesProps';
 import { GameContextProps } from '../props/GameContextProps';
+import { notify } from '../utils/MessageUtils';
 
 const Favorites: React.FC = () => {
   const { state, dispatch } = useContext<GameContextProps>(GameContext);
@@ -50,12 +50,7 @@ const Favorites: React.FC = () => {
                         payload: selectedItems,
                       });
                       setSelectedItems([]);
-                      const message = 'Items deleted successfully!';
-                      if (Platform.OS === 'android') {
-                        ToastAndroid.show(message, ToastAndroid.SHORT);
-                      } else if (Platform.OS === 'ios') {
-                        Alert.alert('Better', message);
-                      }
+                      notify('Items deleted successfully!');
                     },
                     style: 'destructive',
                   },
@@ -63,7 +58,7 @@ const Favorites: React.FC = () => {
                 { cancelable: true }
               );
             }}
-            title={'+' + selectedItems.length.toString()}
+            title={'+' + selectedItems.length}
           />
         ) : <></>,
       });
@@ -83,14 +78,11 @@ const Favorites: React.FC = () => {
   };
 
   const renderItem = ({ item }: { item: string | DailyItem }) => {
-    let formatted = '';
+    let formatted = `${item}`;
     if (action === 'daily' && (item as DailyItem)?.numbers) {
       const registerDate = Intl.DateTimeFormat('pt-BR').format((item as DailyItem)?.registerDate);
       formatted = `${registerDate} - ${(item as DailyItem)?.numbers}`;
-    } else {
-      formatted = `${item}`;
     }
-
     return (
       <ListItem bottomDivider>
         {action === 'specials' && (

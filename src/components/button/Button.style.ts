@@ -19,8 +19,8 @@ import {
   
     activeButton: {
       fontWeight: 'bold',
-      backgroundColor: '#000',
       textAlign: 'center',
+      backgroundColor: '#000',
     } as ViewStyle,
   
     inactiveButton: {
@@ -37,8 +37,8 @@ import {
   
     inactiveText: {
       color: '#000',
-      textAlign: 'center',
       width: '100%',
+      textAlign: 'center',
     } as TextStyle,
   });
   

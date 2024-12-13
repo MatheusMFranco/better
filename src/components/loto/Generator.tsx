@@ -1,51 +1,45 @@
 import React, { useState, useCallback, useContext } from 'react';
-import { SafeAreaView, ToastAndroid, Platform, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { Button } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import styles from './Loto.style';
-import Chosen from './Chosen';
+import { notify } from '../../utils/MessageUtils';
+import { GeneratorProps } from '../../props/GeneratorProps';
 import GameContext from '../../context/GameContext';
-
-interface GeneratorProps {
-  amount: number;
-}
+import Chosen from './Chosen';
+import styles from './Loto.style';
+import {
+  gameFormat,
+  numberFormat,
+  sort,
+} from '../../utils/FormatUtils';
+import { MAX_AMOUNT } from '../constants/MinAndMax';
 
 const Generator: React.FC<GeneratorProps> = ({ amount }) => {
   const [numbers, setNumbers] = useState<string[]>([]);
   const { dispatch, state } = useContext(GameContext);
 
-  const MAX_AMOUNT = 12;
-
   const isInvalid = amount <= 0 || amount > MAX_AMOUNT;
 
   const randomize = useCallback((list: string[]): string => {
-    const random = `${Math.ceil(Math.random() * 60) + 1}`.padStart(2, '0');
+    const MEX_NUMBERS = 60;
+    const random = numberFormat(Math.ceil(Math.random() * MEX_NUMBERS) + 1);
     return list.includes(random) ? randomize(list) : random;
   }, []);
-
-  const notify = (message: string): void => {
-    if (Platform.OS === 'android') {
-      ToastAndroid.show(message, ToastAndroid.SHORT);
-    } else if (Platform.OS === 'ios') {
-      Alert.alert('Loto', message);
-    }
-  };
 
   const generateNumbers = useCallback(() => {
     const newNumbers = Array(amount)
       .fill(null)
-      .reduce((list: string[]) => [...list, randomize(list)], [])
-      .sort((a, b) => +a - +b);
+      .reduce((list: string[]) => [...list, randomize(list)], []);
     setNumbers(newNumbers);
     dispatch({
       type: 'dailyGame',
-      payload: newNumbers.join(' '),
+      payload: gameFormat(newNumbers),
     });
   }, [amount, randomize]);
 
   const save = () => {
-    const game = numbers.sort((a, b) => +a - +b).join(' ');
+    const game = gameFormat(numbers);
     const existingGames = state.specials || [];
     if (existingGames.includes(game)) {
       notify(`${game} has already been saved!`);
@@ -54,15 +48,13 @@ const Generator: React.FC<GeneratorProps> = ({ amount }) => {
         type: 'createGame',
         payload: game,
       });
-      const message = `${game} has been saved!`;
-      notify(message);
+      notify(`${game} has been saved!`);
       setNumbers([]);
     }
   };
 
-  const displayNumbers = () => {
-    return numbers.map((chosen) => <Chosen key={chosen} chosen={chosen} />);
-  };
+  const displayNumbers = () => sort(numbers)
+    .map(chosen => <Chosen key={chosen} chosen={chosen} />);
 
   return (
     <>

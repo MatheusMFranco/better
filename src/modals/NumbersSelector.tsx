@@ -6,12 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './Modal.style';
 import Selectable from '../components/button/Selectable';
 import Display from '../components/display/Display';
-
-interface ModalProps {
-  isVisible: boolean;
-  amount: number;
-  onCancel: () => void;
-}
+import { ModalProps } from '../props/ModalProps';
+import { gameFormat, numberFormat } from '../utils/FormatUtils';
 
 const ModalComponent: React.FC<ModalProps> = props => {
   const [numbers, setNumbers] = useState<string[]>([]);
@@ -43,7 +39,7 @@ const ModalComponent: React.FC<ModalProps> = props => {
           cancel={cancel}
           amount={numbers.length}
           max={props.amount}
-          value={numbers.sort((a, b) => +a - +b).join(' ')}
+          value={gameFormat(numbers)}
         />
         <View style={styles.buttons}>
           {Array.from({ length: 60 }, (_, i) => {
@@ -51,10 +47,10 @@ const ModalComponent: React.FC<ModalProps> = props => {
             return (
               <Selectable
                 key={index}
-                label={`${index}`.padStart(2, '0')}
-                onClick={() => toggleNumber(`${index}`.padStart(2, '0'))}
+                label={numberFormat(index)}
+                onClick={() => toggleNumber(numberFormat(index))}
                 list={numbers}
-                disabled={numbers.length >= props.amount && !numbers.includes(`${index}`.padStart(2, '0'))}
+                disabled={numbers.length >= props.amount && !numbers.includes(numberFormat(index))}
               />
             );
           })}
