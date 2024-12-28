@@ -4,8 +4,7 @@ import {
   FlatList,
   StyleSheet,
   Alert,
-  Platform,
-  ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -20,10 +19,23 @@ import { notify } from '../utils/MessageUtils';
 const Favorites: React.FC = () => {
   const { state, dispatch } = useContext<GameContextProps>(GameContext);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const route = useRoute<FavoritesRouteProp>();
   const navigation = useNavigation();
   const { action } = route.params;
+
+  const loadMoreData = () => {
+    if (loading) return;
+    setLoading(true);
+
+    setTimeout(() => {
+      setPage(prevPage => prevPage + 1);
+      setLoading(false);
+    }, 1500);
+  };
 
   useEffect(() => {
     if (action === 'specials') {
@@ -31,12 +43,12 @@ const Favorites: React.FC = () => {
         title: 'Specials',
         headerRight: () => selectedItems.length ? (
           <Button
-            color='secondary'
-            icon={<Ionicons name='trash-bin-outline' size={15} color='white' />}
+            color="secondary"
+            icon={<Ionicons name="trash-bin-outline" size={15} color="white" />}
             onPress={() => {
               Alert.alert(
-                'Confirm Deletion', 
-                `Are you sure you want to delete ${selectedItems.length} item(s)?`, 
+                'Confirm Deletion',
+                `Are you sure you want to delete ${selectedItems.length} item(s)?`,
                 [
                   {
                     text: 'Cancel',
@@ -101,17 +113,24 @@ const Favorites: React.FC = () => {
     );
   };
 
+  const dataToShow = action === 'daily' ? state.daily.slice(0, itemsPerPage * page) : state.specials.slice(0, itemsPerPage * page);
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={action === 'daily' ? state.daily : state.specials}
+        data={dataToShow}
         renderItem={renderItem}
         keyExtractor={(_, index) => `${index}`}
-        ListEmptyComponent={<Text h4 style={styles.emptyMessage}>{
-          action === 'daily' ?
-          'All the games created or generated will appear here.':
-          'The games saved as favorites will appear here.'  
-        }</Text>}
+        ListEmptyComponent={
+          <Text h4 style={styles.emptyMessage}>
+            {action === 'daily'
+              ? 'All the games created or generated will appear here.'
+              : 'The games saved as favorites will appear here.'}
+          </Text>
+        }
+        onEndReached={loadMoreData}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={loading && dataToShow.length ? <ActivityIndicator size="large" color="#0000ff" /> : null}
       />
     </SafeAreaView>
   );
@@ -124,7 +143,7 @@ const styles = StyleSheet.create({
   emptyMessage: {
     padding: 10,
     textAlign: 'center',
-  }
+  },
 });
 
 export default Favorites;
