@@ -1,24 +1,19 @@
-import React, { useContext, useState } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  View,
-} from 'react-native';
-import { Button, Text, Input } from '@rneui/themed';
+import React, {useContext, useState} from 'react';
+import {SafeAreaView, StyleSheet, FlatList, View} from 'react-native';
+import {Button, Text, Input} from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import GameContext from '../context/GameContext';
-import { GameContextProps } from '../props/GameContextProps';
-import { ValidGame } from '../models/ValidGame';
-import { gameRegex } from '../components/regex/GameRegex';
-import { MAX_AMOUNT } from '../components/constants/MinAndMax';
+import {GameContextProps} from '../props/GameContextProps';
+import {ValidGame} from '../models/ValidGame';
+import {gameRegex} from '../components/regex/GameRegex';
+import {MAX_AMOUNT} from '../components/constants/MinAndMax';
 
 const Checker = () => {
   const [game, setGame] = useState<string>('');
   const [validGames, setValidGames] = useState<ValidGame[]>([]);
   const [showResult, setShowResult] = useState(false);
-  const { state } = useContext<GameContextProps>(GameContext);
+  const {state} = useContext<GameContextProps>(GameContext);
 
   const isInvalid = !gameRegex.test(game.replaceAll(' ', ''));
 
@@ -29,16 +24,20 @@ const Checker = () => {
 
   const checkValidGames = () => {
     const MIN_PRICE_AMOUNT = 4;
-    const result: ValidGame[] = state.specials.map(gameItem => {
-      const winningNumbers = splitIntoPairs(game);
-      const gameNumbers = splitIntoPairs(gameItem);
-      const matches = gameNumbers.filter(num => winningNumbers.includes(num)).length;
+    const result: ValidGame[] = state.specials
+      .map(gameItem => {
+        const winningNumbers = splitIntoPairs(game);
+        const gameNumbers = splitIntoPairs(gameItem);
+        const matches = gameNumbers.filter(num =>
+          winningNumbers.includes(num),
+        ).length;
 
-      if (matches >= MIN_PRICE_AMOUNT) {
-        return { game: gameItem, matches };
-      }
-      return null;
-    }).filter(item => item !== null) as ValidGame[];
+        if (matches >= MIN_PRICE_AMOUNT) {
+          return {game: gameItem, matches};
+        }
+        return null;
+      })
+      .filter(item => item !== null) as ValidGame[];
     setValidGames(result);
   };
 
@@ -56,7 +55,9 @@ const Checker = () => {
         style={[style.Input, style.Container]}
         onChangeText={setGame}
         errorStyle={style.Input}
-        errorMessage={game.length >= MAX_AMOUNT && isInvalid ? `Insert a valid game` : ''}
+        errorMessage={
+          game.length >= MAX_AMOUNT && isInvalid ? `Insert a valid game` : ''
+        }
       />
       <Button
         title="CHECK YOUR GAME"
@@ -69,19 +70,25 @@ const Checker = () => {
 
       {validGames.length > 0 ? (
         <View style={style.FlatListContainer}>
-          <Text h4 style={style.ListHeader}>Valid Games with Matches</Text>
+          <Text h4 style={style.ListHeader}>
+            Valid Games with Matches
+          </Text>
           <FlatList
             data={validGames}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }: { item: ValidGame }) => (
+            renderItem={({item}: {item: ValidGame}) => (
               <Text style={style.GameItem}>
                 {splitIntoPairs(item.game).join(', ')} | Matches: {item.matches}
               </Text>
             )}
           />
         </View>
-      ) : showResult && (
-        <Text style={style.NoMatchesMessage}>No game with 4 or more matches found.</Text>
+      ) : (
+        showResult && (
+          <Text style={style.NoMatchesMessage}>
+            No game with 4 or more matches found.
+          </Text>
+        )
       )}
     </SafeAreaView>
   );

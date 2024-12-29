@@ -1,24 +1,19 @@
-import React, { useContext, useState } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Alert,
-} from 'react-native';
-import { Button, Dialog, Text } from '@rneui/themed';
+import React, {useContext, useState} from 'react';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {Button, Dialog, Text} from '@rneui/themed';
 import DocumentPicker from 'react-native-document-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RNFS from 'react-native-fs';
 
-import { GameContextProps } from '../props/GameContextProps';
+import {GameContextProps} from '../props/GameContextProps';
 import GameContext from '../context/GameContext';
-import { notify } from '../utils/MessageUtils';
+import {notify} from '../utils/MessageUtils';
+import {ActionType} from '../models/Action.model';
 
 const DataManager = () => {
-
   const SEPARATOR = '\n';
-  const FILE_NAME = 'better.txt'
-  const { state, dispatch } = useContext<GameContextProps>(GameContext);
+  const FILE_NAME = 'better.txt';
+  const {state, dispatch} = useContext<GameContextProps>(GameContext);
   const [openDialog, setOpenDialog] = useState(false);
   const [modalType, setModalType] = useState('');
 
@@ -33,8 +28,8 @@ const DataManager = () => {
       const fileContent = state.specials.join(SEPARATOR);
       await RNFS.writeFile(filePath, fileContent, 'utf8');
       notify(`File saved in: ${filePath}`);
-    } catch (_) {
-      notify('Error saving file');
+    } catch (error) {
+      notify(`Error saving file ${error}`);
     }
   };
 
@@ -52,14 +47,14 @@ const DataManager = () => {
         payload: [...new Set(fileLines)],
       });
       notify('Games imported to favorites!');
-    } catch (err) {
-      notify('Error importing file');
+    } catch (error) {
+      notify(`Error importing file ${error}`);
     }
   };
 
   const cleanList = (listType: string) => {
     dispatch({
-      type: `removeAll${listType}Game`,
+      type: `removeAll${listType}Game` as ActionType,
       payload: [],
     });
     setOpenDialog(false);
@@ -75,13 +70,13 @@ const DataManager = () => {
           color="secondary"
           title=" EXPORT TO FILE (txt) "
           onPress={exportToFile}
-          icon={<Ionicons name='create-outline' size={24} color='white' />}
+          icon={<Ionicons name="create-outline" size={24} color="white" />}
         />
         <Button
           color="primary"
           title=" IMPORT TO FAVORITES (txt) "
           onPress={importFromFile}
-          icon={<Ionicons name='reader-outline' size={24} color='white' />}
+          icon={<Ionicons name="reader-outline" size={24} color="white" />}
         />
       </View>
       <View style={styles.Action}>
@@ -89,23 +84,25 @@ const DataManager = () => {
           color="secondary"
           title=" DELETE FAVORITES "
           onPress={() => deleteWaning('favorites')}
-          icon={<Ionicons name='close-outline' size={24} color='white' />}
+          icon={<Ionicons name="close-outline" size={24} color="white" />}
         />
         <Button
           color="primary"
           title=" CLEAN HISTORY"
           onPress={() => deleteWaning('history')}
-          icon={<Ionicons name='close-circle-outline' size={24} color='white' />}
+          icon={
+            <Ionicons name="close-circle-outline" size={24} color="white" />
+          }
         />
       </View>
       <Dialog
         isVisible={openDialog}
         onBackdropPress={() => setOpenDialog(false)}>
-        <Dialog.Title title="Warning"/>
+        <Dialog.Title title="Warning" />
         <Text>All the content will be erased, are you sure about that?</Text>
         <Dialog.Actions>
-          <Dialog.Button title="YES, DO IT!" onPress={clean}/>
-          <Dialog.Button title="NO" onPress={() => setOpenDialog(false)}/>
+          <Dialog.Button title="YES, DO IT!" onPress={clean} />
+          <Dialog.Button title="NO" onPress={() => setOpenDialog(false)} />
         </Dialog.Actions>
       </Dialog>
     </SafeAreaView>

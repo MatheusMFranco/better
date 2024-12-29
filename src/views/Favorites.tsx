@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -7,25 +7,25 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { ListItem, Button, Text } from '@rneui/themed';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {ListItem, Button, Text} from '@rneui/themed';
 
 import GameContext from '../context/GameContext';
-import { DailyItem } from '../models/GameState.model';
-import { FavoritesRouteProp } from '../props/FavoritesProps';
-import { GameContextProps } from '../props/GameContextProps';
-import { notify } from '../utils/MessageUtils';
+import {DailyItem} from '../models/GameState.model';
+import {FavoritesRouteProp} from '../props/FavoritesProps';
+import {GameContextProps} from '../props/GameContextProps';
+import {notify} from '../utils/MessageUtils';
 
 const Favorites: React.FC = () => {
-  const { state, dispatch } = useContext<GameContextProps>(GameContext);
+  const {state, dispatch} = useContext<GameContextProps>(GameContext);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(5);
 
   const route = useRoute<FavoritesRouteProp>();
   const navigation = useNavigation();
-  const { action } = route.params;
+  const {action} = route.params;
 
   const loadMoreData = () => {
     if (loading) return;
@@ -41,58 +41,65 @@ const Favorites: React.FC = () => {
     if (action === 'specials') {
       navigation.setOptions({
         title: 'Specials',
-        headerRight: () => selectedItems.length ? (
-          <Button
-            color="secondary"
-            icon={<Ionicons name="trash-bin-outline" size={15} color="white" />}
-            onPress={() => {
-              Alert.alert(
-                'Confirm Deletion',
-                `Are you sure you want to delete ${selectedItems.length} item(s)?`,
-                [
-                  {
-                    text: 'Cancel',
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'Delete',
-                    onPress: () => {
-                      dispatch({
-                        type: 'deleteGame',
-                        payload: selectedItems,
-                      });
-                      setSelectedItems([]);
-                      notify('Items deleted successfully!');
+        headerRight: () =>
+          selectedItems.length ? (
+            <Button
+              color="secondary"
+              icon={
+                <Ionicons name="trash-bin-outline" size={15} color="white" />
+              }
+              onPress={() => {
+                Alert.alert(
+                  'Confirm Deletion',
+                  `Are you sure you want to delete ${selectedItems.length} item(s)?`,
+                  [
+                    {
+                      text: 'Cancel',
+                      style: 'cancel',
                     },
-                    style: 'destructive',
-                  },
-                ],
-                { cancelable: true }
-              );
-            }}
-            title={'+' + selectedItems.length}
-          />
-        ) : <></>,
+                    {
+                      text: 'Delete',
+                      onPress: () => {
+                        dispatch({
+                          type: 'deleteGame',
+                          payload: selectedItems,
+                        });
+                        setSelectedItems([]);
+                        notify('Items deleted successfully!');
+                      },
+                      style: 'destructive',
+                    },
+                  ],
+                  {cancelable: true},
+                );
+              }}
+              title={'+' + selectedItems.length}
+            />
+          ) : (
+            <></>
+          ),
       });
     } else if (action === 'daily') {
-      navigation.setOptions({ title: 'History' });
+      navigation.setOptions({title: 'History'});
     }
   }, [action, navigation, selectedItems, dispatch]);
 
   const handleSelect = (item: string) => {
-    setSelectedItems((prevSelected) => {
+    setSelectedItems(prevSelected => {
       if (prevSelected.includes(item)) {
-        return prevSelected.filter((selectedItem) => selectedItem !== item);
+        return prevSelected.filter(selectedItem => selectedItem !== item);
       } else {
         return [...prevSelected, item];
       }
     });
   };
 
-  const renderItem = ({ item }: { item: string | DailyItem }) => {
+  const renderItem = ({item}: {item: string | DailyItem}) => {
     let formatted = `${item}`;
     if (action === 'daily' && (item as DailyItem)?.numbers) {
-      const registerDate = Intl.DateTimeFormat('pt-BR').format((item as DailyItem)?.registerDate);
+      const registerDate = Intl.DateTimeFormat('pt-BR').format(
+        (item as DailyItem)?.registerDate,
+      );
       formatted = `${registerDate} - ${(item as DailyItem)?.numbers}`;
     }
     return (
@@ -113,7 +120,10 @@ const Favorites: React.FC = () => {
     );
   };
 
-  const dataToShow = action === 'daily' ? state.daily.slice(0, itemsPerPage * page) : state.specials.slice(0, itemsPerPage * page);
+  const dataToShow =
+    action === 'daily'
+      ? state.daily.slice(0, itemsPerPage * page)
+      : state.specials.slice(0, itemsPerPage * page);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -130,7 +140,11 @@ const Favorites: React.FC = () => {
         }
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.5}
-        ListFooterComponent={loading && dataToShow.length ? <ActivityIndicator size="large" color="#0000ff" /> : null}
+        ListFooterComponent={
+          loading && dataToShow.length ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : null
+        }
       />
     </SafeAreaView>
   );
