@@ -1,22 +1,14 @@
-import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-} from 'react-native';
-import {
-  SpeedDial,
-  Button,
-  Text,
-  Input,
-} from '@rneui/themed';
+import React, {useState} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {SpeedDial, Button, Text, Input} from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Generator from '../components/loto/Generator';
 import NumbersSelector from '../modals/NumbersSelector';
-import { FavoritesNavigationProp } from '../props/FavoritesProps';
-import { MAX_AMOUNT } from '../components/constants/MinAndMax';
+import {FavoritesNavigationProp} from '../props/FavoritesProps';
+import {MAX_AMOUNT} from '../components/constants/MinAndMax';
 
-const Game = ({ navigation }: { navigation: FavoritesNavigationProp }) => {
+const Game = ({navigation}: {navigation: FavoritesNavigationProp}) => {
   const [showModal, setShowModal] = useState(false);
   const [openFavoritesDeal, setOpenFavoritesDeal] = React.useState(false);
   const [amount, setAmount] = useState(6);
@@ -36,7 +28,11 @@ const Game = ({ navigation }: { navigation: FavoritesNavigationProp }) => {
         value={`${amount}`}
         onChangeText={updateAmount}
         errorStyle={style.Input}
-        errorMessage={isInvalid ? `The value must be greater than zero and less than ${MAX_AMOUNT}` : ''}
+        errorMessage={
+          isInvalid
+            ? `The value must be greater than zero and less than ${MAX_AMOUNT}`
+            : ''
+        }
       />
       <NumbersSelector
         amount={amount}
@@ -46,33 +42,34 @@ const Game = ({ navigation }: { navigation: FavoritesNavigationProp }) => {
       <Button
         title=" MAKE YOURS"
         color="secondary"
-        icon={<Ionicons name='create-outline' size={24} color='white' />}
+        icon={<Ionicons name="create-outline" size={24} color="white" />}
         onPress={() => setShowModal(true)}
         disabled={isInvalid}
         containerStyle={style.Action}
       />
-      <Text h4 style={style.Container}>OR</Text>
+      <Text h4 style={style.Container}>
+        OR
+      </Text>
       <Generator amount={amount} />
       <SpeedDial
         isOpen={openFavoritesDeal}
-        icon={<Ionicons name='heart' size={24} color='white' />}
-        openIcon={<Ionicons name='close' size={24} color='white' />}
+        icon={<Ionicons name="heart" size={24} color="white" />}
+        openIcon={<Ionicons name="close" size={24} color="white" />}
         onOpen={() => setOpenFavoritesDeal(!openFavoritesDeal)}
-        onClose={() => setOpenFavoritesDeal(!openFavoritesDeal)}
-      >
+        onClose={() => setOpenFavoritesDeal(!openFavoritesDeal)}>
         <SpeedDial.Action
-          icon={<Ionicons name='time' size={20} color='white' />}
+          icon={<Ionicons name="time" size={20} color="white" />}
           title="History"
-          onPress={() => { 
-            navigation.navigate('Favorites', { action: 'daily' });
+          onPress={() => {
+            navigation.navigate('Favorites', {action: 'daily'});
             setOpenFavoritesDeal(false);
           }}
         />
         <SpeedDial.Action
-          icon={<Ionicons name='star' size={20} color='white' />}
+          icon={<Ionicons name="star" size={20} color="white" />}
           title="Specials"
           onPress={() => {
-            navigation.navigate('Favorites', { action: 'specials' });
+            navigation.navigate('Favorites', {action: 'specials'});
             setOpenFavoritesDeal(false);
           }}
         />

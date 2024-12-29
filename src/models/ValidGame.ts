@@ -1,5 +1,4 @@
 export interface ValidGame {
-    game: string;
-    matches: number;
+  game: string;
+  matches: number;
 }
-  

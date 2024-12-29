@@ -1,8 +1,8 @@
-import React, { createContext, useReducer, ReactNode, useEffect } from 'react';
+import React, {createContext, useReducer, ReactNode, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { GameState } from '../models/GameState.model';
-import { Action } from '../models/Action.model';
+import {GameState} from '../models/GameState.model';
+import {Action} from '../models/Action.model';
 
 const actions = {
   createGame(state: GameState, action: Action): GameState {
@@ -16,17 +16,22 @@ const actions = {
     const gamesToDelete = action.payload as string[];
     return {
       ...state,
-      specials: state.specials.filter(numbers => !gamesToDelete.includes(numbers)),
+      specials: state.specials.filter(
+        numbers => !gamesToDelete.includes(numbers),
+      ),
     };
   },
   dailyGame(state: GameState, action: Action): GameState {
     const game = action.payload as string;
     return {
       ...state,
-      daily: [...state.daily, { 
-        numbers: game,
-        registerDate: new Date(),
-      }],
+      daily: [
+        ...state.daily,
+        {
+          numbers: game,
+          registerDate: new Date(),
+        },
+      ],
     };
   },
   removeAllDailyGame(state: GameState): GameState {
@@ -50,9 +55,8 @@ const actions = {
   },
 };
 
-
-export const GameProvider: React.FC<{ children: ReactNode }> = props => {
-  const [state, dispatch] = useReducer(reducer, { specials: [], daily: [] });
+export const GameProvider: React.FC<{children: ReactNode}> = props => {
+  const [state, dispatch] = useReducer(reducer, {specials: [], daily: []});
 
   useEffect(() => {
     const loadState = async () => {
@@ -70,7 +74,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = props => {
         }
         if (daily) {
           const dailyData = JSON.parse(daily);
-          dailyData.forEach((game: { numbers: string }) => {
+          dailyData.forEach((game: {numbers: string}) => {
             dispatch({
               type: 'dailyGame',
               payload: game.numbers,
@@ -107,7 +111,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = props => {
   }, [state]);
 
   return (
-    <GameContext.Provider value={{ state, dispatch }}>
+    <GameContext.Provider value={{state, dispatch}}>
       {props.children}
     </GameContext.Provider>
   );
@@ -117,7 +121,7 @@ const GameContext = createContext<{
   state: GameState;
   dispatch: React.Dispatch<Action>;
 }>({
-  state: { specials: [], daily: [] },
+  state: {specials: [], daily: []},
   dispatch: () => {},
 });
 

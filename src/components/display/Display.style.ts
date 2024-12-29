@@ -1,8 +1,4 @@
-import {
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import {StyleSheet, ViewStyle, TextStyle} from 'react-native';
 
 export default StyleSheet.create({
   display: {

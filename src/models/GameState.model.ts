@@ -1,9 +1,9 @@
 export interface GameState {
-    daily: DailyItem[];
-    specials: string[],
+  daily: DailyItem[];
+  specials: string[];
 }
 
 export interface DailyItem {
-    numbers: string,
-    registerDate: Date,
+  numbers: string;
+  registerDate: Date;
 }

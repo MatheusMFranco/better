@@ -1,6 +1,6 @@
 export interface SelectableButtonProps {
-    onClick: () => void;
-    label: string;
-    disabled: boolean;
-    list: string[];
+  onClick: () => void;
+  label: string;
+  disabled: boolean;
+  list: string[];
 }

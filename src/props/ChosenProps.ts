@@ -1,3 +1,3 @@
 export interface ChosenProps {
-    chosen: string;
+  chosen: string;
 }
