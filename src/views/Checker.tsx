@@ -10,12 +10,19 @@ import {gameRegex} from '../components/regex/GameRegex';
 import {MAX_AMOUNT} from '../components/constants/MinAndMax';
 
 const Checker = () => {
+  const MIN_PRICE_AMOUNT = 4;
+  const MAX_SIZE = 5;
+
   const [game, setGame] = useState<string>('');
+  const [minPriceAmount, setMinPriceAmount] =
+    useState<number>(MIN_PRICE_AMOUNT);
   const [validGames, setValidGames] = useState<ValidGame[]>([]);
   const [showResult, setShowResult] = useState(false);
   const {state} = useContext<GameContextProps>(GameContext);
 
   const isInvalid = !gameRegex.test(game.replaceAll(' ', ''));
+
+  const updateAmount = (size: string) => setMinPriceAmount(+size);
 
   const splitIntoPairs = (str: string): string[] => {
     const cleanedStr = str.replace(/\D/g, '');
@@ -23,7 +30,6 @@ const Checker = () => {
   };
 
   const checkValidGames = () => {
-    const MIN_PRICE_AMOUNT = 4;
     const result: ValidGame[] = state.specials
       .map(gameItem => {
         const winningNumbers = splitIntoPairs(game);
@@ -32,7 +38,7 @@ const Checker = () => {
           winningNumbers.includes(num),
         ).length;
 
-        if (matches >= MIN_PRICE_AMOUNT) {
+        if (matches >= minPriceAmount) {
           return {game: gameItem, matches};
         }
         return null;
@@ -48,6 +54,19 @@ const Checker = () => {
 
   return (
     <SafeAreaView style={style.Checker}>
+      <Text h4 style={style.Container}>
+        Minimum Quantitys:
+      </Text>
+      <Input
+        style={[style.Input, style.Container]}
+        keyboardType="numeric"
+        value={`${minPriceAmount}`}
+        onChangeText={updateAmount}
+        errorStyle={style.Input}
+        errorMessage={
+          minPriceAmount <= 0 ? `The value must be greater than zero` : ''
+        }
+      />
       <Text h4 style={style.Container}>
         Enter the winning game:
       </Text>
@@ -74,7 +93,7 @@ const Checker = () => {
             Valid Games with Matches
           </Text>
           <FlatList
-            data={validGames}
+            data={validGames.slice(0, MAX_SIZE)}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}: {item: ValidGame}) => (
               <Text style={style.GameItem}>
@@ -82,6 +101,11 @@ const Checker = () => {
               </Text>
             )}
           />
+          {validGames.length > MAX_SIZE && (
+            <Text>
+              Showing first {MAX_SIZE} games. Total: {validGames.length}
+            </Text>
+          )}
         </View>
       ) : (
         showResult && (
