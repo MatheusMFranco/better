@@ -17,11 +17,12 @@ import {GameContextProps} from '../props/GameContextProps';
 import {notify} from '../utils/MessageUtils';
 
 const Favorites: React.FC = () => {
+  const ITEMS_PER_PAGE = 5;
   const {state, dispatch} = useContext<GameContextProps>(GameContext);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(ITEMS_PER_PAGE);
 
   const route = useRoute<FavoritesRouteProp>();
   const navigation = useNavigation();
@@ -141,7 +142,7 @@ const Favorites: React.FC = () => {
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.5}
         ListFooterComponent={
-          loading && dataToShow.length ? (
+          loading && dataToShow.length > ITEMS_PER_PAGE ? (
             <ActivityIndicator size="large" color="#0000ff" />
           ) : null
         }
