@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/MatheusMFranco/better/compare/v0.1.1...v0.1.4) (2025-01-03)
+
+
+### Features
+
+* add unit tests configuration ([01eb5f8](https://github.com/MatheusMFranco/better/commit/01eb5f8560db5175206220397d5c848e70297c2b))
+
 ### [0.1.3](https://github.com/MatheusMFranco/better/compare/v0.1.1...v0.1.3) (2025-01-03)
 
 
