@@ -1,6 +1,6 @@
 {
   "name": "better",
-  "version": "0.1.4",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -8,7 +8,7 @@
     "format": "prettier --write \"**/*.ts\" \"**/*.tsx\"",
     "lint": "prettier --check \"**/*.ts\" \"**/*.tsx\"",
     "fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
-    "release": "standard-version --no-tag",
+    "release": "standard-version --skip.tag",
     "start": "react-native start",
     "test": "jest"
   },
