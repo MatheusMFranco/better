@@ -1,4 +1,6 @@
 module.exports = {
   preset: 'react-native',
-  transformIgnorePatterns: [ 'node_modules/(?!(jest-)?@react-native|react-native|@rneui/*)' ],
+  transformIgnorePatterns: [
+    'node_modules/(?!(jest-)?@react-native|react-native|@rneui/.*|@react-native-async-storage/async-storage)',
+  ],
 };
