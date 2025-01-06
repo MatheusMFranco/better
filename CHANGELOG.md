@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/MatheusMFranco/better/compare/v0.1.1...v0.1.5) (2025-01-05)
+
+
+### Features
+
+* add format utils unit tests ([3f84de0](https://github.com/MatheusMFranco/better/commit/3f84de0849201091d0fa79b324cf7e20bdbc29b3))
+* add the amount of numbers to check ([fc4433b](https://github.com/MatheusMFranco/better/commit/fc4433b69ac11adb32f2ebb027b7fe4f61927b99))
+* add unit tests configuration ([01eb5f8](https://github.com/MatheusMFranco/better/commit/01eb5f8560db5175206220397d5c848e70297c2b))
+
+
+### Bug Fixes
+
+* changelog ([31ad5e0](https://github.com/MatheusMFranco/better/commit/31ad5e04b0776b71f297a1020e30082d32bea5a3))
+* tag version ([ea96168](https://github.com/MatheusMFranco/better/commit/ea96168e395500af2d77120f53ab19e01a2554b5))
+
 ### [0.1.4](https://github.com/MatheusMFranco/better/compare/v0.1.1...v0.1.4) (2025-01-03)
 
 
