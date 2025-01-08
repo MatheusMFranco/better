@@ -26,7 +26,6 @@ const Favorites: React.FC = () => {
 
   const route = useRoute<FavoritesRouteProp>();
   const navigation = useNavigation();
-  const {action} = route.params;
 
   const loadMoreData = () => {
     if (loading) return;
@@ -39,12 +38,13 @@ const Favorites: React.FC = () => {
   };
 
   useEffect(() => {
-    if (action === 'specials') {
+    if (route?.params?.action === 'specials') {
       navigation.setOptions({
         title: 'Specials',
         headerRight: () =>
           selectedItems.length ? (
             <Button
+              testID="delete-button"
               color="secondary"
               icon={
                 <Ionicons name="trash-bin-outline" size={15} color="white" />
@@ -80,10 +80,10 @@ const Favorites: React.FC = () => {
             <></>
           ),
       });
-    } else if (action === 'daily') {
+    } else if (route?.params?.action === 'daily') {
       navigation.setOptions({title: 'History'});
     }
-  }, [action, navigation, selectedItems, dispatch]);
+  }, [route?.params?.action, navigation, selectedItems, dispatch]);
 
   const handleSelect = (item: string) => {
     setSelectedItems(prevSelected => {
@@ -97,21 +97,22 @@ const Favorites: React.FC = () => {
 
   const renderItem = ({item}: {item: string | DailyItem}) => {
     let formatted = `${item}`;
-    if (action === 'daily' && (item as DailyItem)?.numbers) {
+    if (route?.params?.action === 'daily' && (item as DailyItem)?.numbers) {
       const registerDate = Intl.DateTimeFormat('pt-BR').format(
         (item as DailyItem)?.registerDate,
       );
       formatted = `${registerDate} - ${(item as DailyItem)?.numbers}`;
     }
     return (
-      <ListItem bottomDivider>
-        {action === 'specials' && (
+      <ListItem bottomDivider testID="list-item">
+        {route?.params?.action === 'specials' && (
           <ListItem.CheckBox
             iconType="ionicon"
             checkedIcon="checkbox-outline"
             uncheckedIcon="square-outline"
             checked={selectedItems.includes(formatted)}
             onPress={() => handleSelect(formatted)}
+            testID={`checkbox-${formatted}`} // Test ID para o checkbox
           />
         )}
         <ListItem.Content>
@@ -122,19 +123,19 @@ const Favorites: React.FC = () => {
   };
 
   const dataToShow =
-    action === 'daily'
+    route?.params?.action === 'daily'
       ? state.daily.slice(0, itemsPerPage * page)
       : state.specials.slice(0, itemsPerPage * page);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} testID="favorites-container">
       <FlatList
         data={dataToShow}
         renderItem={renderItem}
         keyExtractor={(_, index) => `${index}`}
         ListEmptyComponent={
-          <Text h4 style={styles.emptyMessage}>
-            {action === 'daily'
+          <Text h4 style={styles.emptyMessage} testID="empty-message">
+            {route?.params?.action === 'daily'
               ? 'All the games created or generated will appear here.'
               : 'The games saved as favorites will appear here.'}
           </Text>
@@ -143,9 +144,14 @@ const Favorites: React.FC = () => {
         onEndReachedThreshold={0.5}
         ListFooterComponent={
           loading && dataToShow.length > ITEMS_PER_PAGE ? (
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator
+              size="large"
+              color="#0000ff"
+              testID="loading-indicator"
+            />
           ) : null
         }
+        testID="flatlist"
       />
     </SafeAreaView>
   );
