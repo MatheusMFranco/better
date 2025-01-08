@@ -58,6 +58,7 @@ const Checker = () => {
         Minimum Quantitys:
       </Text>
       <Input
+        testID="price-input"
         style={[style.Input, style.Container]}
         keyboardType="numeric"
         value={`${minPriceAmount}`}
@@ -71,6 +72,7 @@ const Checker = () => {
         Enter the winning game:
       </Text>
       <Input
+        testID="game-input"
         style={[style.Input, style.Container]}
         onChangeText={setGame}
         errorStyle={style.Input}

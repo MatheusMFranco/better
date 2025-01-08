@@ -64,19 +64,21 @@ const DataManager = () => {
   const clean = () => cleanList(modalType === 'history' ? 'Daily' : 'Specials');
 
   return (
-    <SafeAreaView style={styles.DataManager}>
+    <SafeAreaView style={styles.DataManager} testID="data-manager-container">
       <View style={styles.Action}>
         <Button
           color="secondary"
           title=" EXPORT TO FILE (txt) "
           onPress={exportToFile}
           icon={<Ionicons name="create-outline" size={24} color="white" />}
+          testID="export-to-file-button"
         />
         <Button
           color="primary"
           title=" IMPORT TO FAVORITES (txt) "
           onPress={importFromFile}
           icon={<Ionicons name="reader-outline" size={24} color="white" />}
+          testID="import-to-favorites-button"
         />
       </View>
       <View style={styles.Action}>
@@ -85,6 +87,7 @@ const DataManager = () => {
           title=" DELETE FAVORITES "
           onPress={() => deleteWaning('favorites')}
           icon={<Ionicons name="close-outline" size={24} color="white" />}
+          testID="delete-favorites-button"
         />
         <Button
           color="primary"
@@ -93,16 +96,28 @@ const DataManager = () => {
           icon={
             <Ionicons name="close-circle-outline" size={24} color="white" />
           }
+          testID="clean-history-button"
         />
       </View>
       <Dialog
         isVisible={openDialog}
-        onBackdropPress={() => setOpenDialog(false)}>
+        onBackdropPress={() => setOpenDialog(false)}
+        testID="confirmation-dialog">
         <Dialog.Title title="Warning" />
-        <Text>All the content will be erased, are you sure about that?</Text>
+        <Text testID="dialog-message">
+          All the content will be erased, are you sure about that?
+        </Text>
         <Dialog.Actions>
-          <Dialog.Button title="YES, DO IT!" onPress={clean} />
-          <Dialog.Button title="NO" onPress={() => setOpenDialog(false)} />
+          <Dialog.Button
+            title="YES, DO IT!"
+            onPress={clean}
+            testID="dialog-yes-button"
+          />
+          <Dialog.Button
+            title="NO"
+            onPress={() => setOpenDialog(false)}
+            testID="dialog-no-button"
+          />
         </Dialog.Actions>
       </Dialog>
     </SafeAreaView>
